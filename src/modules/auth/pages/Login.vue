@@ -64,9 +64,6 @@ export default Vue.extend({
     },
     async login() {
       await this.ActionLogin({ vm: this, payload: this.user });
-      setTimeout(() => {
-        this.$router.push("/");
-      }, 1500);
     },
   },
 });

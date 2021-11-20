@@ -41,6 +41,7 @@ const actions: ActionTree<IAuthState, IState> = {
       });
     } finally {
       vm.isBtnLoading = false;
+      vm.$router.push("/");
     }
   },
   ActionLogout() {

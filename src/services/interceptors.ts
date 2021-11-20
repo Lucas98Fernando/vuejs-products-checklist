@@ -14,6 +14,15 @@ const interceptors = (vm: any) =>
           bodyMessage: error.response.data.message,
           colorText: "red",
         });
+      } else if (error.response.status === 401) {
+        removeLocalToken();
+        vm.$router.replace("/auth/login");
+        vm.$root.$emit("show-base-dialog", {
+          srcImg: require("@/assets/images/illustrations/waiting.png"),
+          titleMessage: "Sua sessão expirou!",
+          bodyMessage: error.response.data.message,
+          colorText: "red",
+        });
       } else if (error.response.status === 403) {
         vm.$root.$emit("show-base-dialog", {
           srcImg: require("@/assets/images/illustrations/waiting.png"),
@@ -30,7 +39,7 @@ const interceptors = (vm: any) =>
         });
       } else {
         removeLocalToken();
-        vm.$router.replace("/login");
+        vm.$router.replace("/auth/login");
         vm.$root.$emit("show-base-dialog", {
           srcImg: require("@/assets/images/illustrations/waiting.png"),
           titleMessage: "Ocorreu um erro",

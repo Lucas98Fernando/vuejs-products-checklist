@@ -4,6 +4,7 @@
     :value="value"
     :label="label"
     :placeholder="placeholder"
+    :type="type"
     :validation-type="validationType"
     :rules="
       validationType === 'default'
@@ -23,6 +24,7 @@
     :prepend-inner-icon="prependInnerIcon"
     outlined
     @input="$emit('input', $event)"
+    @keypress="onlyNumbers === true ? isNumber($event) : false"
   ></v-text-field>
 </template>
 
@@ -35,7 +37,7 @@ export default Vue.extend({
       type: String,
     },
     value: {
-      type: String,
+      type: [String, Number],
     },
     label: {
       type: String,
@@ -44,12 +46,17 @@ export default Vue.extend({
     placeholder: {
       type: String,
     },
+    type: {
+      type: String,
+    },
     validationType: {
       type: String,
-      default: "password",
     },
     prependInnerIcon: {
       type: String,
+    },
+    onlyNumbers: {
+      type: Boolean,
     },
   },
   data() {
@@ -74,6 +81,28 @@ export default Vue.extend({
         (v: string) => /.+@.+\..+/.test(v) || "Informe um e-mail válido",
       ],
     };
+  },
+  methods: {
+    // Método que faz com que os campos só aceitem valores numéricos
+    isNumber(evt: KeyboardEvent): void {
+      const keysAllowed: string[] = [
+        "0",
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        ".",
+      ];
+      const keyPressed: string = evt.key;
+      if (!keysAllowed.includes(keyPressed)) {
+        evt.preventDefault();
+      }
+    },
   },
 });
 </script>
