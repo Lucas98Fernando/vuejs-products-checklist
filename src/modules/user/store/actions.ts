@@ -5,7 +5,7 @@ import api from "@/services/api";
 import { getLocalToken } from "@/helpers/storage";
 
 const actions: ActionTree<IUserState, IState> = {
-  async ActionCreateOrUpdate(
+  async ActionCrud(
     _,
     { vm, method, url, body, snackbarOptions, forceRerender }
   ) {
@@ -15,6 +15,9 @@ const actions: ActionTree<IUserState, IState> = {
         method: method,
         url: url,
         data: body,
+        headers: {
+          Authorization: `Bearer ${getLocalToken()?.toString()}`,
+        },
       });
       vm.dialog = false;
       if (apiResponse.status === 200 || apiResponse.status === 201) {

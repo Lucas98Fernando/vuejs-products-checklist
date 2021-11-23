@@ -1,8 +1,15 @@
 <template>
-  <base-data-table :headers="headers" :products="products">
+  <base-data-table
+    :headers="headers"
+    :products="products"
+    :updateProduct="updateProduct"
+    :deleteProduct="deleteProduct"
+    :total="total"
+  >
     <v-dialog
       v-model="dialog"
       transition="dialog-bottom-transition"
+      width="350"
       max-width="500"
     >
       <template v-slot:activator="{ on, attrs }">
@@ -24,8 +31,8 @@
           <v-toolbar-title>Criar produto</v-toolbar-title>
           <v-spacer></v-spacer>
 
-          <v-btn color="white" icon @click="dialog = false">
-            <v-icon>mdi-close</v-icon>
+          <v-btn color="white" icon @click="closeDialog()">
+            <v-icon color="red">mdi-close</v-icon>
           </v-btn>
         </v-card-title>
         <v-card-text class="mt-5">
@@ -63,9 +70,6 @@
             </v-btn>
           </v-form>
         </v-card-text>
-        <!-- <v-card-actions class="justify-end">
-          <v-btn text @click="dialog = false">Fechar</v-btn>
-        </v-card-actions> -->
       </v-card>
     </v-dialog>
   </base-data-table>
@@ -75,6 +79,7 @@
 import Vue from "vue";
 import BaseDataTable from "@/shared/DataTable/BaseDataTable.vue";
 import BaseTextField from "@/shared/Inputs/BaseTextField.vue";
+import { IProducts } from "@/modules/user/interfaces/dto";
 import { mapActions, mapState } from "vuex";
 export default Vue.extend({
   components: { BaseDataTable, BaseTextField },
@@ -86,7 +91,7 @@ export default Vue.extend({
       isBtnLoading: false,
       headers: [
         {
-          text: "Name",
+          text: "Nome",
           align: "start",
           sortable: false,
           value: "name",
@@ -94,6 +99,7 @@ export default Vue.extend({
         { text: "Preço", value: "price" },
         { text: "Quantidade", value: "qtd" },
         { text: "Status", value: "status" },
+        { text: "Ações", value: "actions" },
       ],
       products: [],
       formProduct: {
@@ -103,30 +109,48 @@ export default Vue.extend({
       },
     };
   },
-  async mounted() {
+  async created() {
     await this.getProducts();
+  },
+  watch: {
+    dialog(val) {
+      val || this.closeDialog();
+    },
   },
   computed: {
     ...mapState("user", ["productsApi"]),
-    // total(): number {
-    //   const productsArray = this.productsApi;
-    //   const getPrice = (el: any) => el.price * el.qtd;
-    //   const sum = (el: any) => (el += el);
-    //   const result = productsArray.map(getPrice).reduce(sum);
-    //   return result;
-    // },
+    total(): number {
+      const productsArray = this.productsApi;
+      if (productsArray.length > 0) {
+        const getPrice = (el: IProducts) => el.price * el.qtd;
+        const sum = (el: number, count: number) => (el += count);
+        const result = productsArray.map(getPrice).reduce(sum);
+        return result;
+      } else {
+        return 0;
+      }
+    },
   },
   methods: {
-    ...mapActions("user", ["ActionGetProducts", "ActionCreateOrUpdate"]),
+    ...mapActions("user", ["ActionGetProducts", "ActionCrud"]),
     validate() {
       (this.$refs.form as Vue & { validate: () => boolean }).validate();
+    },
+    resetValidation() {
+      (
+        this.$refs.form as Vue & { resetValidation: () => boolean }
+      ).resetValidation();
+    },
+    reset() {
+      (this.$refs.form as Vue & { reset: () => boolean }).reset();
     },
     async getProducts() {
       try {
         this.products = [];
         await this.ActionGetProducts();
-        this.productsApi.forEach((product: any) => {
+        this.productsApi.forEach((product: IProducts) => {
           this.$data.products.push({
+            id: product.id,
             name: product.name,
             price: product.price,
             qtd: product.qtd,
@@ -137,7 +161,7 @@ export default Vue.extend({
       }
     },
     async createProduct() {
-      await this.ActionCreateOrUpdate({
+      await this.ActionCrud({
         vm: this,
         method: "POST",
         url: "/products",
@@ -147,6 +171,38 @@ export default Vue.extend({
         },
         forceRerender: this.getProducts,
       });
+    },
+    async updateProduct(data: IProducts) {
+      await this.ActionCrud({
+        vm: this,
+        method: "PUT",
+        url: `/products/${data.item.id}`,
+        body: {
+          name: data.item.name,
+          price: data.item.price,
+          qtd: data.item.qtd,
+        },
+        snackbarOptions: {
+          message: "O produto foi atualizado com sucesso!",
+        },
+        forceRerender: this.getProducts,
+      });
+    },
+    async deleteProduct(data: IProducts) {
+      await this.ActionCrud({
+        vm: this,
+        method: "DELETE",
+        url: `/products/${data.id}`,
+        snackbarOptions: {
+          message: "O produto foi removido com sucesso!",
+        },
+        forceRerender: this.getProducts,
+      });
+    },
+    closeDialog() {
+      this.dialog = false;
+      this.resetValidation();
+      this.reset();
     },
   },
 });

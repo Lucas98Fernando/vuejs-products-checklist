@@ -39,8 +39,8 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
-      <v-btn color="red" fab @click="logout()" small>
-        <v-icon>mdi-logout</v-icon>
+      <v-btn color="red" fab small @click="logout()">
+        <v-icon class="ml-1">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-main>

@@ -2,7 +2,6 @@
   <v-data-table
     :headers="headers"
     :items="products"
-    :total="total"
     class="elevation-1 rounded-xl px-3 py-3"
     hide-default-footer
   >
@@ -26,37 +25,70 @@
         :ripple="false"
       ></v-simple-checkbox>
     </template>
+    <template v-slot:[`item.actions`]="{ item }">
+      <v-icon small color="red" @click="deleteProduct(item)">mdi-close</v-icon>
+    </template>
+    <template v-slot:[`item.name`]="props">
+      <v-edit-dialog
+        :return-value.sync="props.item.name"
+        @save="updateProduct(props)"
+        save-text="Salvar"
+        cancel-text="Cancelar"
+        large
+      >
+        {{ props.item.name }}
+        <template v-slot:input>
+          <v-text-field
+            v-model="props.item.name"
+            :rules="[max25chars]"
+            label="Nome"
+            counter
+          ></v-text-field>
+        </template>
+      </v-edit-dialog>
+    </template>
+    <template v-slot:[`item.price`]="props">
+      <v-edit-dialog
+        :return-value.sync="props.item.price"
+        @save="updateProduct(props)"
+        save-text="Salvar"
+        cancel-text="Cancelar"
+        large
+      >
+        {{ props.item.price }}
+        <template v-slot:input>
+          <v-text-field
+            v-model="props.item.price"
+            :rules="[max25chars]"
+            label="Preço"
+            counter
+          ></v-text-field>
+        </template>
+      </v-edit-dialog>
+    </template>
+    <template v-slot:[`item.qtd`]="props">
+      <v-edit-dialog
+        :return-value.sync="props.item.qtd"
+        @save="updateProduct(props)"
+        save-text="Salvar"
+        cancel-text="Cancelar"
+        large
+      >
+        {{ props.item.qtd }}
+        <template v-slot:input>
+          <v-text-field
+            v-model="props.item.qtd"
+            :rules="[max25chars]"
+            label="Quantidade"
+            counter
+          ></v-text-field>
+        </template>
+      </v-edit-dialog>
+    </template>
     <template v-slot:no-data>
       <div>Nenhum produto cadastrado ainda</div>
     </template>
   </v-data-table>
-  <!-- <v-dialog
-      v-model="dialog"
-      transition="dialog-bottom-transition"
-      max-width="600"
-    >
-      <v-card>
-        <v-toolbar color="primary" light>Criar novo produto</v-toolbar>
-        <v-card-text>
-          <div class="text-h2 pa-12">Hello world!</div>
-        </v-card-text>
-        <v-card-actions class="justify-end">
-          <v-btn text @click="dialog = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-    <v-btn
-      color="primary"
-      fab
-      absolute
-      bottom
-      right
-      class="mb-9"
-      x-large
-      @click="dialog = true"
-    >
-      <v-icon color="black">mdi-plus</v-icon>
-    </v-btn> -->
 </template>
 
 <script lang="ts">
@@ -73,11 +105,26 @@ export default Vue.extend({
     total: {
       type: Number,
     },
+    updateProduct: {
+      type: Function,
+    },
+    deleteProduct: {
+      type: Function,
+    },
   },
   data() {
     return {
       dialog: false,
+      max25chars: (v: string) => v.length <= 25 || "Campo muito longo!",
     };
+  },
+  methods: {
+    // save() {},
+    // cancel() {},
+    // open() {},
+    close() {
+      console.log("Dialog closed");
+    },
   },
 });
 </script>
