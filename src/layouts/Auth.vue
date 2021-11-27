@@ -20,12 +20,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import "@/assets/css/theme/mixins/flex-center.scss";
 .main-auth-container {
   width: 100%;
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  @include flex-center(true);
   padding: 0 1rem;
 }
 </style>

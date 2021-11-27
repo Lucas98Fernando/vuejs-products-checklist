@@ -1,7 +1,11 @@
 import { ActionTree } from "vuex";
 import { IState } from "@/store";
 import { IAuthState } from "./state";
-import { removeLocalToken, setLocalToken } from "@/helpers/storage";
+import {
+  removeAllStorageData,
+  setLocalToken,
+  setLocalUser,
+} from "@/helpers/storage";
 import api from "@/services/api";
 
 const actions: ActionTree<IAuthState, IState> = {
@@ -33,6 +37,10 @@ const actions: ActionTree<IAuthState, IState> = {
       const response = await api.post("/login", payload);
 
       await dispatch("ActionSetToken", response.data.token);
+      await dispatch("ActionSetUser", {
+        name: response.data.name,
+        email: response.data.email,
+      });
     } catch (error) {
       vm.$root.$emit("show-base-snackbar", {
         color: "error",
@@ -45,11 +53,15 @@ const actions: ActionTree<IAuthState, IState> = {
     }
   },
   ActionLogout() {
-    removeLocalToken();
+    removeAllStorageData();
   },
   ActionSetToken({ commit }, token) {
     commit("AUTH/SET_TOKEN", token);
     setLocalToken(token);
+  },
+  ActionSetUser({ commit }, payload) {
+    commit("AUTH/SET_USER", payload);
+    setLocalUser(JSON.stringify(payload));
   },
 };
 

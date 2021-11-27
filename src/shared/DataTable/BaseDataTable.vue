@@ -12,7 +12,7 @@
         <v-spacer />
         <h3>
           O quanto será gasto:
-          <span class="primary--text"> R$ {{ total }}</span>
+          <span class="primary--text"> R$ {{ total.toFixed(2) }}</span>
         </h3>
       </v-toolbar>
       <v-spacer />
@@ -123,9 +123,6 @@ export default Vue.extend({
     };
   },
   methods: {
-    // save() {},
-    // cancel() {},
-    // open() {},
     close() {
       console.log("Dialog closed");
     },

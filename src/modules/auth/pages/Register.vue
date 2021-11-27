@@ -30,7 +30,7 @@
       block
       large
       color="yellow"
-      @click="validate(), register()"
+      @click="validateForm() ? register() : validateForm()"
     >
       Cadastrar
     </v-btn>
@@ -47,6 +47,7 @@ import BaseLogo from "@/shared/BaseLogo.vue";
 import BaseTextField from "@/shared/Inputs/BaseTextField.vue";
 import BaseTextFieldPassword from "@/shared/Inputs/BaseTextFieldPassword.vue";
 import { mapActions } from "vuex";
+import { validate } from "@/helpers/formHandlers";
 export default Vue.extend({
   name: "Register",
   components: { BaseLogo, BaseTextField, BaseTextFieldPassword },
@@ -63,8 +64,8 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("auth", ["ActionRegister"]),
-    validate() {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate();
+    validateForm() {
+      return validate(this);
     },
     async register() {
       await this.ActionRegister({ vm: this, payload: this.user });

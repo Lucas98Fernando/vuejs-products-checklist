@@ -1,5 +1,6 @@
 <template>
   <v-app dark>
+    <base-dialog-logout />
     <v-navigation-drawer v-model="drawer" :mini-variant="miniVariant" fixed app>
       <v-list>
         <v-list-item class="justify-center">
@@ -39,6 +40,7 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <span class="mr-3">Olá, {{ user.name }}!</span>
       <v-btn color="red" fab small @click="logout()">
         <v-icon class="ml-1">mdi-logout</v-icon>
       </v-btn>
@@ -60,14 +62,17 @@
 <script lang="ts">
 import Vue from "vue";
 import BaseLogo from "@/shared/BaseLogo.vue";
-import { mapActions } from "vuex";
+import BaseDialogLogout from "@/shared/Dialogs/BaseDialogLogout.vue";
+import { getLocalUser } from "@/helpers/storage";
 export default Vue.extend({
   name: "MainLayout",
   components: {
     BaseLogo,
+    BaseDialogLogout,
   },
   data() {
     return {
+      user: JSON.parse(getLocalUser() || "{}"),
       selectedItem: "",
       drawer: true,
       items: [
@@ -82,14 +87,8 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapActions("auth", ["ActionLogout"]),
-    async logout() {
-      try {
-        await this.ActionLogout();
-        this.$router.push("/login");
-      } catch (error) {
-        alert(error);
-      }
+    logout() {
+      this.$root.$emit("show-base-dialog-logout");
     },
   },
 });

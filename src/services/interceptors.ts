@@ -1,5 +1,5 @@
 import api from "./api";
-import { removeLocalToken } from "@/helpers/storage";
+import { removeAllStorageData } from "@/helpers/storage";
 
 const interceptors = (vm: any) =>
   api.interceptors.response.use(
@@ -15,11 +15,11 @@ const interceptors = (vm: any) =>
           colorText: "red",
         });
       } else if (error.response.status === 401) {
-        removeLocalToken();
+        removeAllStorageData();
         vm.$router.replace("/auth/login");
         vm.$root.$emit("show-base-dialog", {
-          srcImg: require("@/assets/images/illustrations/waiting.png"),
-          titleMessage: "Sua sessão expirou!",
+          srcImg: require("@/assets/images/illustrations/comeback.png"),
+          titleMessage: "Credenciais inválidas",
           bodyMessage: error.response.data.message,
           colorText: "red",
         });
@@ -38,7 +38,7 @@ const interceptors = (vm: any) =>
           colorText: "red",
         });
       } else {
-        removeLocalToken();
+        removeAllStorageData();
         vm.$router.replace("/auth/login");
         vm.$root.$emit("show-base-dialog", {
           srcImg: require("@/assets/images/illustrations/waiting.png"),

@@ -23,7 +23,7 @@
       large
       light
       color="yellow"
-      @click="validate(), login()"
+      @click="validateForm() ? login() : validateForm()"
     >
       Entrar
     </v-btn>
@@ -41,6 +41,7 @@ import BaseLogo from "@/shared/BaseLogo.vue";
 import BaseTextField from "@/shared/Inputs/BaseTextField.vue";
 import BaseTextFieldPassword from "@/shared/Inputs/BaseTextFieldPassword.vue";
 import { mapActions, mapState } from "vuex";
+import { validate } from "@/helpers/formHandlers";
 export default Vue.extend({
   name: "Login",
   components: { BaseLogo, BaseTextField, BaseTextFieldPassword },
@@ -59,8 +60,8 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("auth", ["ActionLogin"]),
-    validate() {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate();
+    validateForm() {
+      return validate(this);
     },
     async login() {
       await this.ActionLogin({ vm: this, payload: this.user });
