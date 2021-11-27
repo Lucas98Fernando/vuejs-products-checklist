@@ -8,5 +8,7 @@ export interface IProducts {
     name: string;
     price: number;
     qtd: number;
+    status: boolean;
   };
+  status: number | boolean;
 }

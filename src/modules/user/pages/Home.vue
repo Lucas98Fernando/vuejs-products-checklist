@@ -2,8 +2,9 @@
   <base-data-table
     :headers="headers"
     :products="products"
-    :updateProduct="updateProduct"
-    :deleteProduct="deleteProduct"
+    :update-product="updateProduct"
+    :delete-product="deleteProduct"
+    :toggle-status="toggleStatus"
     :total="total"
   >
     <v-dialog
@@ -64,7 +65,7 @@
               large
               light
               color="yellow"
-              @click="validate(), createProduct()"
+              @click="validateForm() ? createProduct() : validateForm()"
             >
               Cadastrar
             </v-btn>
@@ -80,6 +81,7 @@ import Vue from "vue";
 import BaseDataTable from "@/shared/DataTable/BaseDataTable.vue";
 import BaseTextField from "@/shared/Inputs/BaseTextField.vue";
 import { IProducts } from "@/modules/user/interfaces/dto";
+import { reset, resetValidation, validate } from "@/helpers/formHandlers";
 import { mapActions, mapState } from "vuex";
 export default Vue.extend({
   components: { BaseDataTable, BaseTextField },
@@ -133,16 +135,8 @@ export default Vue.extend({
   },
   methods: {
     ...mapActions("user", ["ActionGetProducts", "ActionCrud"]),
-    validate() {
-      (this.$refs.form as Vue & { validate: () => boolean }).validate();
-    },
-    resetValidation() {
-      (
-        this.$refs.form as Vue & { resetValidation: () => boolean }
-      ).resetValidation();
-    },
-    reset() {
-      (this.$refs.form as Vue & { reset: () => boolean }).reset();
+    validateForm() {
+      return validate(this);
     },
     async getProducts() {
       try {
@@ -154,6 +148,7 @@ export default Vue.extend({
             name: product.name,
             price: product.price,
             qtd: product.qtd,
+            status: product.status === 1 ? true : false,
           });
         });
       } catch (error) {
@@ -199,10 +194,27 @@ export default Vue.extend({
         forceRerender: this.getProducts,
       });
     },
+    async toggleStatus(data: IProducts) {
+      await this.ActionCrud({
+        vm: this,
+        method: "PUT",
+        url: `/products/${data.id}`,
+        body: {
+          name: data.name,
+          price: data.price,
+          qtd: data.qtd,
+          status: data.status === true ? 1 : 0,
+        },
+        snackbarOptions: {
+          message: "Status atualizado!",
+        },
+        forceRerender: this.getProducts,
+      });
+    },
     closeDialog() {
       this.dialog = false;
-      this.resetValidation();
-      this.reset();
+      resetValidation(this);
+      reset(this);
     },
   },
 });

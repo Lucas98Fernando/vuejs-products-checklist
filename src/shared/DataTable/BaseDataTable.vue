@@ -22,6 +22,7 @@
       <v-simple-checkbox
         v-model="item.status"
         color="primary"
+        @click="toggleStatus(item)"
         :ripple="false"
       ></v-simple-checkbox>
     </template>
@@ -109,6 +110,9 @@ export default Vue.extend({
       type: Function,
     },
     deleteProduct: {
+      type: Function,
+    },
+    toggleStatus: {
       type: Function,
     },
   },
