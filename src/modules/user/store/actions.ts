@@ -28,8 +28,10 @@ const actions: ActionTree<IUserState, IState> = {
         });
         forceRerender();
       }
-    } catch (error) {
-      console.log(error);
+    } catch {
+      if (method === "PATCH") {
+        forceRerender();
+      }
     } finally {
       vm.isBtnLoading = false;
     }
@@ -37,7 +39,7 @@ const actions: ActionTree<IUserState, IState> = {
   async ActionGetProducts({ commit }) {
     return await api({
       method: "GET",
-      url: "/products/",
+      url: "/products",
       headers: {
         Authorization: `Bearer ${getLocalToken()?.toString()}`,
       },

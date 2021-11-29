@@ -25,6 +25,7 @@
       color="yellow"
       @click="validateForm() ? login() : validateForm()"
     >
+      <v-icon class="mr-2" small>mdi-login</v-icon>
       Entrar
     </v-btn>
 
@@ -61,7 +62,7 @@ export default Vue.extend({
   methods: {
     ...mapActions("auth", ["ActionLogin"]),
     validateForm() {
-      return validate(this);
+      return validate({ context: this.$refs.form });
     },
     async login() {
       await this.ActionLogin({ vm: this, payload: this.user });

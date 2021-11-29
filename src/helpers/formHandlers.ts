@@ -1,13 +1,13 @@
-export const validate = (context: any) => {
-  return (context.$refs.form as Vue & { validate: () => boolean }).validate();
+export const validate = ({ context }: any): boolean => {
+  return (context as Vue & { validate: () => boolean }).validate();
 };
 
-export const resetValidation = (context: any) => {
+export const resetValidation = ({ context }: any): boolean => {
   return (
-    context.$refs.form as Vue & { resetValidation: () => boolean }
+    context as Vue & { resetValidation: () => boolean }
   ).resetValidation();
 };
 
-export const reset = (context: any) => {
-  return (context.$refs.form as Vue & { reset: () => boolean }).reset();
+export const reset = ({ context }: any): boolean => {
+  return (context as Vue & { reset: () => boolean }).reset();
 };

@@ -1,5 +1,12 @@
 <template>
-  <v-snackbar v-model="snackbar" :timeout="3000" :color="color" right top>
+  <v-snackbar
+    v-model="snackbar"
+    :timeout="3000"
+    :color="color"
+    rounded="xl"
+    right
+    top
+  >
     <v-icon class="mr-2">{{ icon }}</v-icon>
     {{ message }}
     <template #action="{ attrs }">

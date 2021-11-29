@@ -7,7 +7,7 @@
   >
     <v-card rounded="xl">
       <v-card-text class="text-center">
-        <img :src="`${srcImg}`" alt="" width="100%" />
+        <img :src="`${srcImg}`" alt="" width="250" />
         <h1 class="my-3" :class="`${colorText}--text`">
           {{ titleMessage }}
         </h1>

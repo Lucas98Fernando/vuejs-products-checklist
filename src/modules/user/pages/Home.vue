@@ -136,7 +136,7 @@ export default Vue.extend({
   methods: {
     ...mapActions("user", ["ActionGetProducts", "ActionCrud"]),
     validateForm() {
-      return validate(this);
+      return validate({ context: this.$refs.form });
     },
     async getProducts() {
       try {
@@ -170,7 +170,7 @@ export default Vue.extend({
     async updateProduct(data: IProducts) {
       await this.ActionCrud({
         vm: this,
-        method: "PUT",
+        method: "PATCH",
         url: `/products/${data.item.id}`,
         body: {
           name: data.item.name,
@@ -197,12 +197,9 @@ export default Vue.extend({
     async toggleStatus(data: IProducts) {
       await this.ActionCrud({
         vm: this,
-        method: "PUT",
+        method: "PATCH",
         url: `/products/${data.id}`,
         body: {
-          name: data.name,
-          price: data.price,
-          qtd: data.qtd,
           status: data.status === true ? 1 : 0,
         },
         snackbarOptions: {
@@ -213,8 +210,8 @@ export default Vue.extend({
     },
     closeDialog() {
       this.dialog = false;
-      resetValidation(this);
-      reset(this);
+      resetValidation({ context: this.$refs.form });
+      reset({ context: this.$refs.form });
     },
   },
 });

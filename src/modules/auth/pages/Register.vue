@@ -32,7 +32,7 @@
       color="yellow"
       @click="validateForm() ? register() : validateForm()"
     >
-      Cadastrar
+      Criar conta
     </v-btn>
 
     <div class="text-center mt-3">
@@ -65,7 +65,7 @@ export default Vue.extend({
   methods: {
     ...mapActions("auth", ["ActionRegister"]),
     validateForm() {
-      return validate(this);
+      return validate({ context: this.$refs.form });
     },
     async register() {
       await this.ActionRegister({ vm: this, payload: this.user });
