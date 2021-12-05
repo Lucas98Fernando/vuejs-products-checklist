@@ -50,8 +50,8 @@ export default Vue.extend({
     return {
       isFormValid: true,
       user: {
-        email: "lucas@vuex.com",
-        password: "12345678",
+        email: "",
+        password: "",
       },
       isBtnLoading: false,
     };
