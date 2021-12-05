@@ -16,7 +16,7 @@ const actions: ActionTree<IUserState, IState> = {
         url: url,
         data: body,
         headers: {
-          Authorization: `Bearer ${getLocalToken()?.toString()}`,
+          Authorization: `Bearer ${getLocalToken()}`,
         },
       });
       vm.dialog = false;
@@ -41,7 +41,7 @@ const actions: ActionTree<IUserState, IState> = {
       method: "GET",
       url: "/products",
       headers: {
-        Authorization: `Bearer ${getLocalToken()?.toString()}`,
+        Authorization: `Bearer ${getLocalToken()}`,
       },
     }).then((products) => {
       commit("USER/GET_PRODUCTS", products.data);

@@ -6,6 +6,7 @@
     :delete-product="deleteProduct"
     :toggle-status="toggleStatus"
     :total="total"
+    :is-data-table-loading="isDataTableLoading"
   >
     <v-dialog
       v-model="dialog"
@@ -54,9 +55,9 @@
             <base-text-field
               v-model="formProduct.qtd"
               label="Quantidade"
-              :onlyNumbers="true"
               placeholder="Informe a quantidade do produto"
               validation-type="default"
+              :onlyNumbers="true"
             />
             <v-btn
               :disabled="!isFormValid"
@@ -91,6 +92,7 @@ export default Vue.extend({
       dialog: false,
       isFormValid: true,
       isBtnLoading: false,
+      isDataTableLoading: true,
       headers: [
         {
           text: "Nome",
@@ -141,6 +143,7 @@ export default Vue.extend({
     async getProducts() {
       try {
         this.products = [];
+        this.isDataTableLoading = true;
         await this.ActionGetProducts();
         this.productsApi.forEach((product: IProducts) => {
           this.$data.products.push({
@@ -151,8 +154,8 @@ export default Vue.extend({
             status: product.status === 1 ? true : false,
           });
         });
-      } catch (error) {
-        console.log(error);
+      } finally {
+        this.isDataTableLoading = false;
       }
     },
     async createProduct() {
@@ -174,8 +177,8 @@ export default Vue.extend({
         url: `/products/${data.item.id}`,
         body: {
           name: data.item.name,
-          price: data.item.price,
-          qtd: data.item.qtd,
+          price: +data.item.price,
+          qtd: +data.item.qtd,
         },
         snackbarOptions: {
           message: "O produto foi atualizado com sucesso!",
@@ -200,6 +203,9 @@ export default Vue.extend({
         method: "PATCH",
         url: `/products/${data.id}`,
         body: {
+          name: data.name,
+          price: +data.price,
+          qtd: +data.qtd,
           status: data.status === true ? 1 : 0,
         },
         snackbarOptions: {

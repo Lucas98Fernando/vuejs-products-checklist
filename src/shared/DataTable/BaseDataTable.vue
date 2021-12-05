@@ -2,6 +2,7 @@
   <v-data-table
     :headers="headers"
     :items="products"
+    :loading="isDataTableLoading"
     class="elevation-1 rounded-xl px-3 py-3"
     hide-default-footer
   >
@@ -58,12 +59,14 @@
       >
         {{ props.item.price }}
         <template v-slot:input>
-          <v-text-field
+          <base-text-field
+            class="pt-2"
             v-model="props.item.price"
-            :rules="[max25chars]"
             label="Preço"
-            counter
-          ></v-text-field>
+            placeholder="Ex: 5.20"
+            validation-type="default"
+            :onlyNumbers="true"
+          />
         </template>
       </v-edit-dialog>
     </template>
@@ -77,12 +80,14 @@
       >
         {{ props.item.qtd }}
         <template v-slot:input>
-          <v-text-field
+          <base-text-field
+            class="pt-2"
             v-model="props.item.qtd"
-            :rules="[max25chars]"
             label="Quantidade"
-            counter
-          ></v-text-field>
+            placeholder="Informe a quantidade do produto"
+            validation-type="default"
+            :onlyNumbers="true"
+          />
         </template>
       </v-edit-dialog>
     </template>
@@ -94,14 +99,19 @@
 
 <script lang="ts">
 import Vue from "vue";
+import BaseTextField from "@/shared/Inputs/BaseTextField.vue";
 export default Vue.extend({
   name: "BaseDataTable",
+  components: { BaseTextField },
   props: {
     products: {
       type: Array,
     },
     headers: {
       type: Array,
+    },
+    isDataTableLoading: {
+      type: Boolean,
     },
     total: {
       type: Number,
