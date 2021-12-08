@@ -1,7 +1,7 @@
 <template>
   <v-row>
     <v-col cols="12" md="6">
-      <v-card rounded="xl" class="flex-center" min-height="200">
+      <v-card rounded="xl" class="card-home" min-height="200">
         <v-icon size="30">mdi-playlist-plus</v-icon>
         <v-card-title class="primary--text">
           {{ qtdProducts }}
@@ -13,7 +13,7 @@
       </v-card>
     </v-col>
     <v-col cols="12" md="6">
-      <v-card rounded="xl" class="flex-center" min-height="200">
+      <v-card rounded="xl" class="card-home" min-height="200">
         <v-icon size="30">mdi-currency-usd</v-icon>
         <v-card-title class="primary--text">
           Valor atual a pagar: R$ {{ total.toFixed(2) }}
@@ -56,7 +56,8 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import "@/assets/css/theme/mixins/flex-center.scss";
-.flex-center {
+.card-home {
   @include flex-center(true);
+  box-shadow: rgba(255, 235, 59, 0.15) 0px 2px 8px 0px !important;
 }
 </style>
