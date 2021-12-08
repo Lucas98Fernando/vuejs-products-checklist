@@ -13,9 +13,13 @@
 
 <img src="./src/assets/images/screenshots/login.png" />
 
-- Home
+- Dashboard
 
-<img src="./src/assets/images/screenshots/home.png" />
+<img src="./src/assets/images/screenshots/dashboard.png" />
+
+- Checklist
+
+<img src="./src/assets/images/screenshots/checklist.png" />
 
 ## :hammer: Configuração do projeto
 
