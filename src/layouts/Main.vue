@@ -51,7 +51,7 @@
       </v-container>
     </v-main>
     <v-footer absolute inset app>
-      <span class="mx-auto">
+      <span class="mx-auto text-center">
         &copy; {{ new Date().getFullYear() }} | Desenvolvido com
         <v-icon color="red" small>mdi-heart</v-icon> por Lucas Fernando
       </span>
@@ -66,10 +66,7 @@ import BaseDialogLogout from "@/shared/Dialogs/BaseDialogLogout.vue";
 import { getLocalUser } from "@/helpers/storage";
 export default Vue.extend({
   name: "MainLayout",
-  components: {
-    BaseLogo,
-    BaseDialogLogout,
-  },
+  components: { BaseLogo, BaseDialogLogout },
   data() {
     return {
       user: JSON.parse(getLocalUser() || "{}"),
@@ -77,9 +74,14 @@ export default Vue.extend({
       drawer: true,
       items: [
         {
-          icon: "mdi-apps",
-          title: "Início",
+          icon: "mdi-view-dashboard-outline",
+          title: "Dashboard",
           to: "/",
+        },
+        {
+          icon: "mdi-clipboard-text-outline",
+          title: "Checklist",
+          to: "/checklist",
         },
       ],
       miniVariant: false,

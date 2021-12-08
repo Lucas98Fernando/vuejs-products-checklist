@@ -22,6 +22,7 @@
         : defaultValidation
     "
     :prepend-inner-icon="prependInnerIcon"
+    :dense="small"
     outlined
     @input="$emit('input', $event)"
     @keypress="onlyNumbers === true ? isNumber($event) : false"
@@ -56,6 +57,9 @@ export default Vue.extend({
       type: String,
     },
     onlyNumbers: {
+      type: Boolean,
+    },
+    small: {
       type: Boolean,
     },
   },

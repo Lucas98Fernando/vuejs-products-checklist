@@ -16,13 +16,24 @@ const routes: Array<RouteConfig> = [
     children: [
       {
         path: "/",
-        name: "Home",
+        name: "Dashboard",
         meta: {
-          title: "Início",
+          title: "Dashboard",
         },
         component: () =>
           import(
-            /* webpackChunkName: "home" */ "@/modules/user/pages/Home.vue"
+            /* webpackChunkName: "dashboard" */ "@/modules/user/pages/Home.vue"
+          ),
+      },
+      {
+        path: "/checklist",
+        name: "Checklist",
+        meta: {
+          title: "Meu checklist",
+        },
+        component: () =>
+          import(
+            /* webpackChunkName: "checklist" */ "@/modules/user/pages/Checklist.vue"
           ),
       },
     ],

@@ -3,19 +3,45 @@
     :headers="headers"
     :items="products"
     :loading="isDataTableLoading"
+    :search="search"
     class="elevation-1 rounded-xl px-3 py-3"
     hide-default-footer
   >
     <template v-slot:top>
-      <v-toolbar flat color="transparent">
-        <v-toolbar-title>Minha lista</v-toolbar-title>
-        <v-divider class="mx-4" inset vertical></v-divider>
-        <v-spacer />
+      <v-toolbar flat color="transparent" v-if="!$vuetify.breakpoint.mobile">
+        <v-toolbar-title class="hidden-sm-and-down">
+          <v-icon>mdi-clipboard-text-outline</v-icon> Minha lista
+        </v-toolbar-title>
+        <v-divider class="mx-4 hidden-sm-and-down" inset vertical></v-divider>
+        <v-spacer class="hidden-sm-and-down" />
+        <base-text-field
+          v-model="search"
+          class="mt-5"
+          label="Pesquisar"
+          :small="true"
+          validation-type="noValidation"
+          prepend-inner-icon="mdi-magnify"
+        />
+        <v-spacer class="hidden-sm-and-down" />
         <h3>
           O quanto será gasto:
           <span class="primary--text"> R$ {{ total.toFixed(2) }}</span>
         </h3>
       </v-toolbar>
+      <div v-else>
+        <base-text-field
+          v-model="search"
+          class="mt-3"
+          label="Pesquisar"
+          :small="true"
+          validation-type="noValidation"
+          prepend-inner-icon="mdi-magnify"
+        />
+        <h3 class="mb-3">
+          O quanto será gasto:
+          <span class="primary--text"> R$ {{ total.toFixed(2) }}</span>
+        </h3>
+      </div>
       <v-spacer />
       <slot />
     </template>
@@ -42,9 +68,8 @@
         <template v-slot:input>
           <v-text-field
             v-model="props.item.name"
-            :rules="[max25chars]"
+            :maxLength="25"
             label="Nome"
-            counter
           ></v-text-field>
         </template>
       </v-edit-dialog>
@@ -92,7 +117,8 @@
       </v-edit-dialog>
     </template>
     <template v-slot:no-data>
-      <div>Nenhum produto cadastrado ainda</div>
+      <div class="my-4">Nenhum produto cadastrado ainda</div>
+      <img src="@/assets/images/illustrations/waiting.png" width="300px" />
     </template>
   </v-data-table>
 </template>
@@ -129,7 +155,7 @@ export default Vue.extend({
   data() {
     return {
       dialog: false,
-      max25chars: (v: string) => v.length <= 25 || "Campo muito longo!",
+      search: "",
     };
   },
   methods: {

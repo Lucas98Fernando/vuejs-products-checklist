@@ -19,8 +19,10 @@
       <v-card-actions>
         <v-spacer></v-spacer>
 
-        <v-btn color="grey" text @click="showDialog = false"> Fechar </v-btn>
-        <v-btn color="red" @click="logout()"> Sair </v-btn>
+        <v-btn color="grey" text @click="showDialog = false"> Cancelar </v-btn>
+        <v-btn color="red" @click="logout()">
+          <v-icon>mdi-logout</v-icon> Sair
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
